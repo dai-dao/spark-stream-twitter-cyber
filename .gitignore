@@ -8,3 +8,4 @@ spark/.sbt
 spark/.bash_history
 spark/target/*
 spark/dependency-reduced-pom.xml
+spark/.idea
