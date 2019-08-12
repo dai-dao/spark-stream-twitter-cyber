@@ -25,8 +25,8 @@
     <jvm.options.xx>-XX:+CMSClassUnloadingEnabled</jvm.options.xx>
   </properties>
 
-  <groupId>dataproc-spark-demos</groupId>
-  <artifactId>spark-streaming-pubsub-demo</artifactId>
+  <groupId>stream-threat-intel</groupId>
+  <artifactId>spark-stream-twitter-cyber</artifactId>
   <version>0.0.1</version>
 
   <dependencies>
