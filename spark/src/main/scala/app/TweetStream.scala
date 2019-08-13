@@ -14,6 +14,7 @@ import org.apache.spark.streaming.dstream.DStream
 import org.apache.spark.mllib.clustering.{StreamingKMeans, StreamingKMeansModel}
 import org.apache.spark.sql.types.{DoubleType, IntegerType, StringType, StructField, StructType}
 import org.apache.spark.sql.{DataFrame, Row, SparkSession}
+import app.DataStoreUtils.Cluster
 
 
 object TweetStream {
@@ -69,7 +70,7 @@ object TweetStream {
     out
   }
 
-  def cluster(model : StreamingKMeansModel, input : DataFrame, spark: SparkSession, sc : SparkContext): RDD[Row] = {
+  def cluster(model : StreamingKMeansModel, input : DataFrame, spark: SparkSession, sc : SparkContext): RDD[Cluster] = {
     import spark.implicits._
     // TODO: Train model on training dataset, save / load / update model in production setting
     val densevector = input.select("TFIDF").rdd.map(_.getAs[SparseVector]("TFIDF").toDense)
@@ -85,19 +86,25 @@ object TweetStream {
     val distances = centers_col.zip(vector).map(t => t match {
       case (a, b) => Vectors.sqdist(b, a)
     })
+    //
     val data = combineLists(tweets, preds, distances)
             .map(t => t match {case List(a: String, b: Integer, c: Double) => (a, b, c)})
-    var out = data.toDF("tweets", "preds", "distances")
+    val out = data.toDF("tweets", "preds", "distances")
     // Get tweet with closest distance to each centroid
     out.orderBy("preds", "distances")
       .groupBy("preds").agg(
       min("distances"),
       first(col("tweets"))
-    ).rdd
+    ).rdd.map(
+      t => t match {
+        case Row(a: Integer, b : Double, c : String) =>
+          Cluster(a, c)
+      }
+    )
   }
 
   def pipeline(input : RDD[String], num_feats : Int, spark : SparkSession,
-               model : StreamingKMeansModel, sc : SparkContext): RDD[Row]
+               model : StreamingKMeansModel, sc : SparkContext): RDD[Cluster]
   = {
     val df = processTweet(input, spark)
     val feats = tfidf_pipeline(df, num_feats)
@@ -111,7 +118,7 @@ object TweetStream {
                          num_feats : Int,
                          spark : SparkSession,
                          sc : SparkContext
-                        ) : DStream[Row] = {
+                        ) : DStream[Cluster] = {
     input.window(Seconds(windowLength), Seconds(slidingInterval)).
         transform(pipeline(_, num_feats, spark, model.latestModel(), sc))
   }

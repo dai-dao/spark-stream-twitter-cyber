@@ -9,6 +9,7 @@ import org.apache.spark.mllib.clustering.StreamingKMeans
 import org.apache.spark.streaming.pubsub.{PubsubUtils, SparkGCPCredentials}
 import org.apache.spark.streaming.{Seconds, StreamingContext}
 import TweetStream._
+import DataStoreUtils._
 import org.apache.spark.sql.{Row, SparkSession}
 
 
@@ -61,15 +62,9 @@ object ThreatIntel {
       .setDecayFactor(decayFactor)
       .setRandomCenters(numFeats, weight, seed=seed)
 
-    // Process the stream and save results
+    // Process the stream and save results to DataStore
     val outStream = processTweetStream(tweetStream, windowLength.toInt, slidingInterval.toInt, model, numFeats, spark, sc)
-    outStream.foreachRDD(rdd => rdd.collect().toList.map(
-      t => t match {
-        case Row(a: Integer, b : Double, c : String) =>
-          // TODO: Save results on DataStore
-          println(a, c)
-      }
-    ))
+    outStream.foreachRDD(rdd => saveToDatastore(rdd.collect(), windowLength.toInt))
     //
     ssc
   }
@@ -78,7 +73,7 @@ object ThreatIntel {
     if (args.length != 5) {
       System.err.println(
         """
-          | Usage: TrendingHashtags <projectID> <windowLength> <slidingInterval> <totalRunningTime>
+          | Usage: ThreatIntel <projectID> <windowLength> <slidingInterval> <totalRunningTime>
           |
           |     <projectID>: ID of Google Cloud project
           |     <windowLength>: The duration of the window, in seconds

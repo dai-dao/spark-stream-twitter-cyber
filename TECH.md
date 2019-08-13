@@ -1,10 +1,10 @@
 # TODO
-- Save results on DataStore
+- Hook everything together
+    - Can check the results on Spark logs and DataStore without turning on the http function
 - Tweets generator: Run on a VM instance with service account to publish to Pub/Sub, otherwise no messages will go through
     - Cloud shell is fine for tesing
     - Write my OWN script and hook up with real Twitter feeds
-- Hook everything together
-- Adjust the results and UI on threat intel platform
+- (Extra) Adjust the results and UI on threat intel platform
 
 # Lessons
 - Spark / Scala is complex, needed lots of time to do it the right way

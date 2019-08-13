@@ -96,13 +96,7 @@ class TweetStreamSpec extends WordSpec with MustMatchers with BeforeAndAfter wit
       val inputData: mutable.Queue[RDD[String]] = mutable.Queue()
       val inputStream = ssc.queueStream(inputData)
       val outputStream = processTweetStream(inputStream, 1, 1, model, numFeats, spark, sc)
-      outputStream.foreachRDD(rdd => rdd.collect().toList.map(
-        t => t match {
-          case Row(a: Integer, b : Double, c : String) =>
-            c.length must be > 0
-            println(a, c)
-        }
-      ))
+      outputStream.foreachRDD(rdd => rdd.collect().length must be > 0)
       //
       ssc.start()
       //
