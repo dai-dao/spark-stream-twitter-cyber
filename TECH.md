@@ -1,5 +1,8 @@
 # TODO
 - Hook everything together
+    - Set up cloud and publish the jar
+        - Just test that the jar does NOT crash and log is being written
+        - THEN hook up the tweets
     - Can check the results on Spark logs and DataStore without turning on the http function
 - Tweets generator: Run on a VM instance with service account to publish to Pub/Sub, otherwise no messages will go through
     - Cloud shell is fine for tesing
@@ -7,6 +10,7 @@
 - (Extra) Adjust the results and UI on threat intel platform
 
 # Lessons
+- Should create the repo at the VERY beginning
 - Spark / Scala is complex, needed lots of time to do it the right way
 - Should keep a list of tasks accomplished for task logging purposes, and to refer in the future
 
