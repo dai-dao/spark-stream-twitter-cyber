@@ -1,6 +1,6 @@
 # Start with a BLANK project
 export PROJECT=$(gcloud info --format='value(config.project)')
-export SERVICE_ACCOUNT_NAME="dataproc-service-account-2"
+export SERVICE_ACCOUNT_NAME="dataproc-service-account-3"
 
 # Enable APIs
 gcloud services enable \

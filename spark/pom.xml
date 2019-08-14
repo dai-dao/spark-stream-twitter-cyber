@@ -156,16 +156,6 @@
                 <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
                   <mainClass>app.ThreatIntel</mainClass>
                 </transformer>
-                <transformer
-                        implementation="org.apache.maven.plugins.shade.resource.IncludeResourceTransformer">
-                  <resource>/resources/keywords.txt</resource>
-                  <file>src/main/resources/keywords.txt</file>
-                </transformer>
-                <transformer
-                        implementation="org.apache.maven.plugins.shade.resource.IncludeResourceTransformer">
-                  <resource>/resources/stopwords.txt</resource>
-                  <file>src/main/resources/stopwords.txt</file>
-                </transformer>
               </transformers>
               <relocations>
                 <relocation>

@@ -28,8 +28,7 @@ object TweetStream {
     var lines = new ListBuffer[String]()
     var thisLine: String = null
     try {
-      val reader = new BufferedReader(new InputStreamReader(getClass()
-                                      .getResourceAsStream("/resources/" + file)))
+      val reader = new BufferedReader(new InputStreamReader(getClass.getResourceAsStream(file)))
       while ({thisLine = reader.readLine(); thisLine != null}) {
         lines += thisLine
       }
@@ -37,7 +36,7 @@ object TweetStream {
       lines.toList
     } catch {
       case e : Exception =>
-        println("STREAM RESOURCE ERROR", e.getMessage)
+        println("STREAM RESOURCE ERROR", e.getMessage())
         Source.fromFile("src/main/resources/" + file).getLines.toList
     }
   }
