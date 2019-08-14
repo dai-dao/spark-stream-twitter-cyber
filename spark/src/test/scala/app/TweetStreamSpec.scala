@@ -2,6 +2,7 @@ package app
 
 import org.scalatest._
 import TweetStream._
+import DataStoreUtils.Cluster
 import org.apache.spark.mllib.clustering.StreamingKMeans
 import org.apache.spark.rdd.RDD
 import org.apache.spark.sql.{Row, SparkSession}
@@ -95,8 +96,16 @@ class TweetStreamSpec extends WordSpec with MustMatchers with BeforeAndAfter wit
       // Make input / output stream
       val inputData: mutable.Queue[RDD[String]] = mutable.Queue()
       val inputStream = ssc.queueStream(inputData)
-      val outputStream = processTweetStream(inputStream, 1, 1, model, numFeats, spark, sc)
-      outputStream.foreachRDD(rdd => rdd.collect().length must be > 0)
+      processTweetStream(
+        inputStream,
+        1,
+        1,
+        model,
+        numFeats,
+        spark,
+        sc,
+        {a : Array[Cluster] => a.length must be > 0}
+      )
       //
       ssc.start()
       //

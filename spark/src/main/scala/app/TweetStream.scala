@@ -117,9 +117,12 @@ object TweetStream {
                          model : StreamingKMeans,
                          num_feats : Int,
                          spark : SparkSession,
-                         sc : SparkContext
-                        ) : DStream[Cluster] = {
-    input.window(Seconds(windowLength), Seconds(slidingInterval)).
+                         sc : SparkContext,
+                         handler: Array[Cluster] => Unit
+                        ) = {
+    val clusters = input.window(Seconds(windowLength), Seconds(slidingInterval)).
         transform(pipeline(_, num_feats, spark, model.latestModel(), sc))
+    //
+    clusters.foreachRDD(rdd => handler(rdd.collect()))
   }
 }

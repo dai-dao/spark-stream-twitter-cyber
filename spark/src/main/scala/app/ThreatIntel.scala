@@ -63,8 +63,16 @@ object ThreatIntel {
       .setRandomCenters(numFeats, weight, seed=seed)
 
     // Process the stream and save results to DataStore
-    val outStream = processTweetStream(tweetStream, windowLength.toInt, slidingInterval.toInt, model, numFeats, spark, sc)
-    outStream.foreachRDD(rdd => saveToDatastore(rdd.collect(), windowLength.toInt))
+    processTweetStream(
+      tweetStream,
+      windowLength.toInt,
+      slidingInterval.toInt,
+      model,
+      numFeats,
+      spark,
+      sc,
+      saveToDatastore(_, windowLength.toInt)
+    )
     //
     ssc
   }
