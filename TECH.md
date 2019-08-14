@@ -1,5 +1,6 @@
 # TODO
-- PubSub problem
+- PubSub problem - google.cloud dependencies
+    - IDF problem with empty documents
 - Hook everything together
     - Set up cloud and publish the jar
         - Just test that the jar does NOT crash and log is being written
