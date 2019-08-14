@@ -163,7 +163,7 @@
                   <mainClass>app.ThreatIntel</mainClass>
                 </transformer>
               </transformers>
-              <relocations>
+              <!-- <relocations>
                 <relocation>
                   <pattern>com</pattern>
                   <shadedPattern>repackaged.com</shadedPattern>
@@ -172,7 +172,7 @@
                     <include>com.google.common.**</include>
                   </includes>
                 </relocation>
-              </relocations>
+              </relocations> -->
               <filters>
                 <filter>
                     <artifact>*:*</artifact>
