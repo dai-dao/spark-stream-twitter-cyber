@@ -1,6 +1,7 @@
 # TODO
-- PubSub problem - google.cloud dependencies
+- PubSub problem - google.cloud dependencies - added google.cloud.core
     - IDF problem with empty documents
+    - Pretty sure it's running, it's just stuck at DataStore utils at the TimeStamp thing
 - Hook everything together
     - Set up cloud and publish the jar
         - Just test that the jar does NOT crash and log is being written
