@@ -1,4 +1,6 @@
 # TODO
+- File not found exception when submitting the JAR
+    - java.io.FileNotFoundException: src/main/resources/keywords.txt
 - Hook everything together
     - Set up cloud and publish the jar
         - Just test that the jar does NOT crash and log is being written
@@ -12,6 +14,11 @@
 # Lessons
 - Should create the repo at the VERY beginning
 - Spark / Scala is complex, needed lots of time to do it the right way
+    - SparkContext object is NOT serializable, do NOT send to worker object
+    - https://stackoverflow.com/questions/23605542/spark-job-is-failed-due-to-java-io-notserializableexception-org-apache-spark-sp
+- Use ``BufferedReader`` to read files in a JAR
+    - https://alvinalexander.com/source-code/scala-java-bufferedreader-readline-while-loop-boolean
+    - https://stackoverflow.com/questions/8258244/accessing-a-file-inside-a-jar-file/8258308#8258308
 - Should keep a list of tasks accomplished for task logging purposes, and to refer in the future
 
 # Extra

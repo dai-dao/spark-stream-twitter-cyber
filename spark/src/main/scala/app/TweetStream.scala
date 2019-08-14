@@ -1,9 +1,9 @@
 package app
 
-import org.apache.spark.SparkContext
+import java.io.{BufferedReader, InputStreamReader}
+
 import org.apache.spark.ml.Pipeline
 import org.apache.spark.ml.feature.{HashingTF, IDF, Tokenizer}
-
 import scala.io.Source
 import org.apache.spark.rdd.RDD
 import org.apache.spark.ml.linalg.{SparseVector, Vector}
@@ -15,6 +15,7 @@ import org.apache.spark.mllib.clustering.{StreamingKMeans, StreamingKMeansModel}
 import org.apache.spark.sql.types.{DoubleType, IntegerType, StringType, StructField, StructType}
 import org.apache.spark.sql.{DataFrame, Row, SparkSession}
 import app.DataStoreUtils.Cluster
+import scala.collection.mutable.ListBuffer
 
 
 object TweetStream {
@@ -23,9 +24,27 @@ object TweetStream {
     val sa = ss.reverse; (sa.head.map(List(_)) /: sa.tail)(_.zip(_).map(p=>p._2 :: p._1))
   }
 
+  def readFile(file : String) : List[String] = {
+    var lines = new ListBuffer[String]()
+    var thisLine: String = null
+    try {
+      val reader = new BufferedReader(new InputStreamReader(getClass()
+                                      .getResourceAsStream("/resources/" + file)))
+      while ({thisLine = reader.readLine(); thisLine != null}) {
+        lines += thisLine
+      }
+      reader.close()
+      lines.toList
+    } catch {
+      case e : Exception =>
+        println("STREAM RESOURCE ERROR", e.getMessage)
+        Source.fromFile("src/main/resources/" + file).getLines.toList
+    }
+  }
+
   def processTweet(input : RDD[String], spark : SparkSession) : DataFrame = {
-    val keywords = Source.fromFile("src/main/resources/keywords.txt").getLines.toList
-    val stopwords = Source.fromFile("src/main/resources/stopwords.txt").getLines.toList
+    val keywords = readFile("keywords.txt")
+    val stopwords = readFile("stopwords.txt")
     // Preprocessing
     val res = input.map(_.replace("\n", " ")).
       map(_.replaceAll("[@#.,!?:]", "")).

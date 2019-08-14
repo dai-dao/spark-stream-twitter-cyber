@@ -1,3 +1,8 @@
+# Start with a BLANK project
+export PROJECT=$(gcloud info --format='value(config.project)')
+export SERVICE_ACCOUNT_NAME="dataproc-service-account-2"
+
+
 gcloud dataproc clusters delete demo-cluster --quiet
 gcloud functions delete http_function --quiet
 gcloud pubsub topics delete tweets --quiet
