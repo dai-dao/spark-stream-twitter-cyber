@@ -21,6 +21,9 @@ from ratelimit import rate_limited
 if len(sys.argv) != 4:
     print("""Error: Incorrect number of parameters.
 
+    export PROJECT=$(gcloud info --format='value(config.project)')
+    python tweet-generator.py $PROJECT 15 1000 &
+
     Usage: python tweet-generator.py <project> <time> <rate>
 
         - project: ID of your GCP project

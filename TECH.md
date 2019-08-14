@@ -1,6 +1,5 @@
 # TODO
-- File not found exception when submitting the JAR
-    - java.io.FileNotFoundException: src/main/resources/keywords.txt
+- PubSub problem
 - Hook everything together
     - Set up cloud and publish the jar
         - Just test that the jar does NOT crash and log is being written
@@ -19,6 +18,7 @@
 - Use ``BufferedReader`` to read files in a JAR
     - https://alvinalexander.com/source-code/scala-java-bufferedreader-readline-while-loop-boolean
     - https://stackoverflow.com/questions/8258244/accessing-a-file-inside-a-jar-file/8258308#8258308
+    - https://www.reddit.com/r/scala/comments/9vg32q/question_accessing_dependencies_of_an_sbt_build/
 - Should keep a list of tasks accomplished for task logging purposes, and to refer in the future
 
 # Extra
