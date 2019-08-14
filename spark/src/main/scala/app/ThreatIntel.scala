@@ -70,7 +70,6 @@ object ThreatIntel {
       model,
       numFeats,
       spark,
-      sc,
       saveToDatastore(_, windowLength.toInt)
     )
     //

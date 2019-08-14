@@ -103,7 +103,6 @@ class TweetStreamSpec extends WordSpec with MustMatchers with BeforeAndAfter wit
         model,
         numFeats,
         spark,
-        sc,
         {a : Array[Cluster] => a.length must be > 0}
       )
       //

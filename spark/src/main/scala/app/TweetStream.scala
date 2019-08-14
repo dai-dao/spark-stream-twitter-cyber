@@ -70,20 +70,20 @@ object TweetStream {
     out
   }
 
-  def cluster(model : StreamingKMeansModel, input : DataFrame, spark: SparkSession, sc : SparkContext): RDD[Cluster] = {
+  def cluster(model : StreamingKMeansModel, input : DataFrame, spark: SparkSession): RDD[Cluster] = {
     import spark.implicits._
     // TODO: Train model on training dataset, save / load / update model in production setting
     val densevector = input.select("TFIDF").rdd.map(_.getAs[SparseVector]("TFIDF").toDense)
-    val vector = densevector.collect().toList.map(a => org.apache.spark.mllib.linalg.Vectors.fromML(a))
-    val rdd = sc.parallelize(vector)
+    val vector = densevector.map(a => org.apache.spark.mllib.linalg.Vectors.fromML(a))
     // TRAIN and UPDATE
-    model.update(rdd, 0.5, "points")
+    model.update(vector, 0.5, "points")
     // Make data Frame and compute cluster distances
     val centers = model.clusterCenters.toList
-    val preds = model.predict(rdd).collect().toList
+    val preds = model.predict(vector).collect().toList
     val centers_col = preds.map(a => centers(a))
+    val vector_list = vector.collect().toList
     val tweets = input.select("tweet").collect().toList.map(a => a(0).toString)
-    val distances = centers_col.zip(vector).map(t => t match {
+    val distances = centers_col.zip(vector_list).map(t => t match {
       case (a, b) => Vectors.sqdist(b, a)
     })
     //
@@ -104,11 +104,11 @@ object TweetStream {
   }
 
   def pipeline(input : RDD[String], num_feats : Int, spark : SparkSession,
-               model : StreamingKMeansModel, sc : SparkContext): RDD[Cluster]
+               model : StreamingKMeansModel): RDD[Cluster]
   = {
     val df = processTweet(input, spark)
     val feats = tfidf_pipeline(df, num_feats)
-    cluster(model, feats, spark, sc)
+    cluster(model, feats, spark)
   }
 
   def processTweetStream(input: DStream[String],
@@ -117,12 +117,11 @@ object TweetStream {
                          model : StreamingKMeans,
                          num_feats : Int,
                          spark : SparkSession,
-                         sc : SparkContext,
                          handler: Array[Cluster] => Unit
                         ) = {
     val clusters = input.window(Seconds(windowLength), Seconds(slidingInterval)).
-        transform(pipeline(_, num_feats, spark, model.latestModel(), sc))
+        transform(pipeline(_, num_feats, spark, model.latestModel()))
     //
-    clusters.foreachRDD(rdd => handler(rdd.collect()))
+    clusters.foreachRDD(rdd => handler(rdd.take(5)))
   }
 }
