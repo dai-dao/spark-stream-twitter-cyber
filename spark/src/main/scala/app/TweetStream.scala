@@ -27,18 +27,12 @@ object TweetStream {
   def readFile(file : String) : List[String] = {
     var lines = new ListBuffer[String]()
     var thisLine: String = null
-    try {
-      val reader = new BufferedReader(new InputStreamReader(getClass.getResourceAsStream(file)))
-      while ({thisLine = reader.readLine(); thisLine != null}) {
-        lines += thisLine
-      }
-      reader.close()
-      lines.toList
-    } catch {
-      case e : Exception =>
-        println("STREAM RESOURCE ERROR", e.getMessage())
-        Source.fromFile("src/main/resources/" + file).getLines.toList
+    val reader = new BufferedReader(new InputStreamReader(getClass.getClassLoader.getResourceAsStream(file)))
+    while ({thisLine = reader.readLine(); thisLine != null}) {
+      lines += thisLine
     }
+    reader.close()
+    lines.toList
   }
 
   def processTweet(input : RDD[String], spark : SparkSession) : DataFrame = {
