@@ -7,7 +7,8 @@
 # Lessons
 - Tweets generator: Run on a VM instance with service account to publish to Pub/Sub, otherwise no messages will go through
 - Should've tested the whole pipeline from the very beginning throughout instead of just the end
-- Dependency order in ``pom.xml`` matters
+- Dependency order in ``pom.xml`` matters   
+    - https://stackoverflow.com/questions/31740785/why-order-of-maven-dependencies-matter/31743617
 - Should create the repo at the VERY beginning
 - Spark / Scala is complex, needed lots of time to learn to do it the right way
     - SparkContext object is NOT serializable, do NOT send to worker object
