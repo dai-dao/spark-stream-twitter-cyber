@@ -1,20 +1,15 @@
 # TODO
-- PubSub problem - google.cloud dependencies - added google.cloud.core
-    - IDF problem with empty documents
-    - Pretty sure it's running, it's just stuck at DataStore utils at the TimeStamp thing
-- Hook everything together
-    - Set up cloud and publish the jar
-        - Just test that the jar does NOT crash and log is being written
-        - THEN hook up the tweets
-    - Can check the results on Spark logs and DataStore without turning on the http function
-- Tweets generator: Run on a VM instance with service account to publish to Pub/Sub, otherwise no messages will go through
-    - Cloud shell is fine for tesing
-    - Write my OWN script and hook up with real Twitter feeds
-- (Extra) Adjust the results and UI on threat intel platform
+- IDF exception when there are no tweets
+- Train IDF on training data, save and load the model to transform in real production
+- Train KMeans model on training dataset, save / load / update model in production setting
+- Adjust the results and UI on threat intel platform
 
 # Lessons
+- Tweets generator: Run on a VM instance with service account to publish to Pub/Sub, otherwise no messages will go through
+- Should've tested the whole pipeline from the very beginning throughout instead of just the end
+- Dependency order in ``pom.xml`` matters
 - Should create the repo at the VERY beginning
-- Spark / Scala is complex, needed lots of time to do it the right way
+- Spark / Scala is complex, needed lots of time to learn to do it the right way
     - SparkContext object is NOT serializable, do NOT send to worker object
     - https://stackoverflow.com/questions/23605542/spark-job-is-failed-due-to-java-io-notserializableexception-org-apache-spark-sp
 - Use ``BufferedReader`` to read files in a JAR
@@ -22,9 +17,6 @@
     - https://stackoverflow.com/questions/8258244/accessing-a-file-inside-a-jar-file/8258308#8258308
     - https://www.reddit.com/r/scala/comments/9vg32q/question_accessing_dependencies_of_an_sbt_build/
 - Should keep a list of tasks accomplished for task logging purposes, and to refer in the future
-
-# Extra
-- Check out https://github.com/HazyResearch/snorkel VERY Useful
 
 # Set up Scala
 https://hortonworks.com/tutorial/setting-up-a-spark-development-environment-with-scala/

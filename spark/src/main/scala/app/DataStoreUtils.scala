@@ -38,10 +38,10 @@ object DataStoreUtils {
     println("\n-------------------------")
     println(s"Window ending ${Timestamp.now()} for the past ${windowLength} seconds\n")
     if (clusters.length == 0) {
-      println("No trending hashtags in this window.")
+      println("No clusters in this window.")
     }
     else {
-      println("Trending hashtags in this window:")
+      println("Clusters in this window:")
       clusters.foreach(cluster => println(s"${cluster.id}, ${cluster.tweet}"))
     }
   }

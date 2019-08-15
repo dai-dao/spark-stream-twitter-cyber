@@ -72,6 +72,7 @@ object TweetStream {
       .setNumFeatures(num_feats)
       .setInputCol("tokens")
       .setOutputCol("hashedTF")
+    // TODO: Exception when no tweets
     val idf = new IDF()
       .setInputCol("hashedTF")
       .setOutputCol("TFIDF")
